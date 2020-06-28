@@ -11,7 +11,6 @@
   #include "ssd1306.h"
 #endif
 
-extern keymap_config_t keymap_config;
 
 #ifdef RGBLIGHT_ENABLE
 //Following line allows macro to read current RGB settings
@@ -26,240 +25,204 @@ extern uint8_t is_master;
 // entirely and just use numbers.
 enum layer_number {
     _QWERTY = 0,
-    _LOWER,
-    _RAISE,
-    _ADJUST
+    _MEDIA,
+    _SYMBOLS,
+    _MOUSE,
+    _NUMPAD,
 };
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
-  LOWER,
-  RAISE,
-  ADJUST,
-  RGBRST
+  MEDIA,
+  SYMBOLS,
+  MOUSE,
+  NUMPAD,
 };
 
 enum macro_keycodes {
   KC_SAMPLEMACRO,
 };
 
-
-// Fillers to make layering more clear
-#define _______ KC_TRNS
-#define XXXXXXX KC_NO
 //Macros
 #define M_SAMPLE M(KC_SAMPLEMACRO)
-
-#if HELIX_ROWS == 5
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-
-  /* Qwerty
-   * ,-----------------------------------------.             ,-----------------------------------------.
-   * |   `  |   1  |   2  |   3  |   4  |   5  |             |   6  |   7  |   8  |   9  |   0  | Bksp |
-   * |------+------+------+------+------+------|             |------+------+------+------+------+------|
-   * | Tab  |   Q  |   W  |   E  |   R  |   T  |             |   Y  |   U  |   I  |   O  |   P  | Bksp |
-   * |------+------+------+------+------+------|             |------+------+------+------+------+------|
-   * | Esc  |   A  |   S  |   D  |   F  |   G  |             |   H  |   J  |   K  |   L  |   ;  |  '   |
-   * |------+------+------+------+------+------+------+------+------+------+------+------+------+------|
-   * | Shift|   Z  |   X  |   C  |   V  |   B  |   [  |   ]  |   N  |   M  |   ,  |   .  |   /  |Shift |
-   * |------+------+------+------+------+------+------+------+------+------+------+------+------+------|
-   * | Ctrl |Adjust|      | Alt  |Lower |Enter | GUI  |      |Space |Raise | Left | Down |  Up  |Right |
-   * `-------------------------------------------------------------------------------------------------'
-   */
-  [_QWERTY] = LAYOUT( \
-      KC_GRV,   KC_1,   KC_2,    KC_3,    KC_4,  KC_5,                      KC_6,  KC_7,  KC_8,    KC_9,    KC_0,    KC_BSPC, \
-      KC_TAB,   KC_Q,   KC_W,    KC_E,    KC_R,  KC_T,                      KC_Y,  KC_U,  KC_I,    KC_O,    KC_P,    KC_BSPC, \
-      KC_ESC,   KC_A,   KC_S,    KC_D,    KC_F,  KC_G,                      KC_H,  KC_J,  KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
-      KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_V,  KC_B,   KC_LBRC, KC_RBRC, KC_N,   KC_M,  KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, \
-      KC_LCTRL, ADJUST, _______, KC_LALT, LOWER, KC_ENT, KC_LGUI, _______, KC_SPC, RAISE, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
-      ),
-
-  /* Lower
-   * ,-----------------------------------------.             ,-----------------------------------------.
-   * |   ~  |   !  |   @  |   #  |   $  |   %  |             |   ^  |   &  |   *  |   (  |   )  | Ins  |
-   * |------+------+------+------+------+------|             |------+------+------+------+------+------|
-   * |   ~  |   !  |   @  |   #  |   $  |   %  |             |   ^  |   &  |   *  |   (  |   )  | Ins  |
-   * |------+------+------+------+------+------|             |------+------+------+------+------+------|
-   * |      |  F1  |  F2  |  F3  |  F4  |  F5  |             |  F6  |   _  |   +  |   {  |   }  |  |   |
-   * |------+------+------+------+------+------+------+------+------+------+------+------+------+------|
-   * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  (   |   )  |  F12 |      |      | Home | End  |      |
-   * |------+------+------+------+------+------+------+------+------+------+------+------+------+------|
-   * |      |      |      |      |      |      |      |      |      |      | Next | Vol- | Vol+ | Play |
-   * `-------------------------------------------------------------------------------------------------'
-   */
-  [_LOWER] = LAYOUT( \
-      KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_INS, \
-      KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_INS, \
-      _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                     KC_F6,   KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE, \
-      _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_LPRN, KC_RPRN, KC_F12,  _______, _______, KC_HOME, KC_END,  _______, \
-      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY \
-      ),
-
-  /* Raise
-   * ,-----------------------------------------.             ,-----------------------------------------.
-   * |   `  |   1  |   2  |   3  |   4  |   5  |             |   6  |   7  |   8  |   9  |   0  | Bksp |
-   * |------+------+------+------+------+------|             |------+------+------+------+------+------|
-   * |   `  |   1  |   2  |   3  |   4  |   5  |             |   6  |   7  |   8  |   9  |   0  | Del  |
-   * |------+------+------+------+------+------|             |------+------+------+------+------+------|
-   * |      |  F1  |  F2  |  F3  |  F4  |  F5  |             |  F6  |   -  |   =  |   [  |   ]  |  \   |
-   * |------+------+------+------+------+------+------+------+------+------+------+------+------+------|
-   * |      |  F7  |  F8  |  F9  |  F10 |  F11 |   <  |   >  |  F12 |      |PrtScn|PageDn|PageUp|      |
-   * |------+------+------+------+------+------+------+------+------+------+------+------+------+------|
-   * |      |      |      |      |      |      |      |      |      |      | Next | Vol- | Vol+ | Play |
-   * `-------------------------------------------------------------------------------------------------'
-   */
-  [_RAISE] = LAYOUT( \
-      KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                      KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL, \
-      KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                      KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL, \
-      _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                     KC_F6,   KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS, \
-      _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_LT,   KC_GT,   KC_F12,  _______, KC_PSCR, KC_PGDN, KC_PGUP, _______, \
-      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY \
-      ),
-
-  /* Adjust (Lower + Raise)
-   * ,-----------------------------------------.             ,-----------------------------------------.
-   * |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |             |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |
-   * |------+------+------+------+------+------|             |------+------+------+------+------+------|
-   * |      | Reset|RGBRST|      |      |      |             |      |      |      |      |      |  Del |
-   * |------+------+------+------+------+------|             |------+------+------+------+------+------|
-   * |      |      |      |Aud on|Audoff| Mac  |             | Win  |      |      |      |      |      |
-   * |------+------+------+------+------+------+------+------+------+------+------+------+------+------|
-   * |      |      |      |      |      |      |      |      |      |      |RGB ON| HUE+ | SAT+ | VAL+ |
-   * |------+------+------+------+------+------+------+------+------+------+------+------+------+------|
-   * |      |      |      |      |      |      |      |      |      |      | MODE | HUE- | SAT- | VAL- |
-   * `-------------------------------------------------------------------------------------------------'
-   */
-  [_ADJUST] =  LAYOUT( \
-      KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                     KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12, \
-      _______, RESET,   RGBRST,  _______, _______, _______,                   _______, _______, _______, _______, _______, KC_DEL, \
-      _______, _______, _______, AU_ON,   AU_OFF,  AG_NORM,                   AG_SWAP, _______, _______, _______, _______, _______, \
-      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_TOG, RGB_HUI, RGB_SAI, RGB_VAI, \
-      _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_MOD, RGB_HUD, RGB_SAD, RGB_VAD \
-      )
+  [_QWERTY] = LAYOUT(KC_GRV, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_BSPC, KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSPC, KC_ESC, KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT, KC_LGUI, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_LBRC, KC_RBRC, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_UP, KC_LCTL, TO(3), TT(4), KC_LALT, KC_LSFT, KC_ENT, LCTL(KC_A), OSL(2), KC_SPC, TT(1), KC_RSFT, KC_LEFT, KC_RGHT, KC_DOWN),
+  [_MEDIA] = LAYOUT(KC_PWR, KC_SLEP, KC_WAKE, KC_NO, AG_SWAP, AG_NORM, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_CUT, KC_COPY, KC_PSTE, KC_NO, KC_NO, KC_CALC, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_VOLU, KC_WBAK, KC_WREF, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_TRNS, KC_TRNS, KC_NO, KC_NO, KC_NO, KC_NO, KC_VOLD, KC_NO, KC_TRNS, KC_NO, KC_NO, KC_NO, KC_NO),
+  [_SYMBOLS] = LAYOUT(KC_NO, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_NO, KC_NO, KC_F11, KC_F12, KC_NO, KC_NO, KC_NO, KC_NO, KC_EQL, KC_MINS, KC_NO, KC_NO, KC_NO, KC_NO, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_BSLS, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_LPRN, KC_SCLN, KC_COLN, KC_RPRN, KC_DOT, KC_COMM, KC_QUES, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_LSFT, KC_NO, TO(0), KC_TRNS, KC_BSPC, KC_NO, KC_RSFT, KC_NO, KC_NO, KC_NO),
+  [_MOUSE] = LAYOUT(KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_WH_D, KC_WH_U, KC_NO, KC_NO, KC_NO, KC_NO, KC_TRNS, KC_NO, KC_NO, KC_NO, KC_NO, TO(0), KC_NO, KC_BTN1, KC_BTN2, KC_NO, KC_NO, KC_NO, KC_NO),
+  [_NUMPAD] = LAYOUT(KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_PSLS, KC_PAST, KC_PMNS, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_P7, KC_P8, KC_P9, KC_PPLS, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_P4, KC_P5, KC_P6, KC_PCMM, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_P1, KC_P2, KC_P3, KC_PEQL, KC_NO, KC_NO, KC_NO, KC_TRNS, KC_NO, KC_NO, KC_NO, TO(0), KC_NO, KC_NO, KC_P0, KC_P0, KC_PDOT, KC_PENT, KC_NO)
 };
-
-#else
-#error "undefined keymaps"
-#endif
 
 
 #ifdef AUDIO_ENABLE
 
 float tone_qwerty[][2]     = SONG(QWERTY_SOUND);
+float tone_dvorak[][2]     = SONG(SYMBOLS_SOUND);
+float tone_colemak[][2]    = SONG(MEDIA_SOUND);
 float tone_plover[][2]     = SONG(PLOVER_SOUND);
 float tone_plover_gb[][2]  = SONG(PLOVER_GOODBYE_SOUND);
 float music_scale[][2]     = SONG(MUSIC_SCALE_SOUND);
 #endif
 
 // define variables for reactive RGB
-bool TOG_STATUS = false;
-int RGB_current_mode;
+/* bool TOG_STATUS = false; */
+/* int RGB_current_mode; */
 
-void persistent_default_layer_set(uint16_t default_layer) {
-  eeconfig_update_default_layer(default_layer);
-  default_layer_set(default_layer);
-}
+/* void persistent_default_layer_set(uint16_t default_layer) { */
+/*   eeconfig_update_default_layer(default_layer); */
+/*   default_layer_set(default_layer); */
+/* } */
 
-// Setting ADJUST layer RGB back to default
-void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) {
-  if (IS_LAYER_ON(layer1) && IS_LAYER_ON(layer2)) {
-    #ifdef RGBLIGHT_ENABLE
-      //rgblight_mode(RGB_current_mode);
-    #endif
-    layer_on(layer3);
-  } else {
-    layer_off(layer3);
-  }
-}
+// Setting UNUSED_5 layer RGB back to default
+/* void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) { */
+/*   if (IS_LAYER_ON(layer1) && IS_LAYER_ON(layer2)) { */
+/*     #ifdef RGBLIGHT_ENABLE */
+/*       //rgblight_mode(RGB_current_mode); */
+/*     #endif */
+/*     layer_on(layer3); */
+/*   } else { */
+/*     layer_off(layer3); */
+/*   } */
+/* } */
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case QWERTY:
-      if (record->event.pressed) {
-        #ifdef AUDIO_ENABLE
-          PLAY_SONG(tone_qwerty);
-        #endif
-        persistent_default_layer_set(1UL<<_QWERTY);
-      }
-      return false;
-      break;
-    case LOWER:
-      if (record->event.pressed) {
-          //not sure how to have keyboard check mode and set it to a variable, so my work around
-          //uses another variable that would be set to true after the first time a reactive key is pressed.
-        if (TOG_STATUS) { //TOG_STATUS checks is another reactive key currently pressed, only changes RGB mode if returns false
-        } else {
-          TOG_STATUS = !TOG_STATUS;
-          #ifdef RGBLIGHT_ENABLE
-            //rgblight_mode(16);
-          #endif
-        }
-        layer_on(_LOWER);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      } else {
-        #ifdef RGBLIGHT_ENABLE
-          //rgblight_mode(RGB_current_mode);   // revert RGB to initial mode prior to RGB mode change
-        #endif
-        TOG_STATUS = false;
-        layer_off(_LOWER);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case RAISE:
-      if (record->event.pressed) {
-        //not sure how to have keyboard check mode and set it to a variable, so my work around
-        //uses another variable that would be set to true after the first time a reactive key is pressed.
-        if (TOG_STATUS) { //TOG_STATUS checks is another reactive key currently pressed, only changes RGB mode if returns false
-        } else {
-          TOG_STATUS = !TOG_STATUS;
-          #ifdef RGBLIGHT_ENABLE
-            //rgblight_mode(15);
-          #endif
-        }
-        layer_on(_RAISE);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      } else {
-        #ifdef RGBLIGHT_ENABLE
-          //rgblight_mode(RGB_current_mode);  // revert RGB to initial mode prior to RGB mode change
-        #endif
-        layer_off(_RAISE);
-        TOG_STATUS = false;
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case ADJUST:
-        if (record->event.pressed) {
-          layer_on(_ADJUST);
-        } else {
-          layer_off(_ADJUST);
-        }
-        return false;
-        break;
-      //led operations - RGB mode change now updates the RGB_current_mode to allow the right RGB mode to be set after reactive keys are released
-    case RGB_MOD:
-      #ifdef RGBLIGHT_ENABLE
-        if (record->event.pressed) {
-          rgblight_mode(RGB_current_mode);
-          rgblight_step();
-          RGB_current_mode = rgblight_config.mode;
-        }
-      #endif
-      return false;
-      break;
-    case RGBRST:
-      #ifdef RGBLIGHT_ENABLE
-        if (record->event.pressed) {
-          eeconfig_update_rgblight_default();
-          rgblight_enable();
-          RGB_current_mode = rgblight_config.mode;
-        }
-      #endif
-      break;
-  }
-  return true;
-}
+/* bool process_record_user(uint16_t keycode, keyrecord_t *record) { */
+/*   switch (keycode) { */
+/*     case QWERTY: */
+/*       if (record->event.pressed) { */
+/*         #ifdef AUDIO_ENABLE */
+/*           PLAY_SONG(tone_qwerty); */
+/*         #endif */
+/*         persistent_default_layer_set(1UL<<_QWERTY); */
+/*       } */
+/*       return false; */
+/*       break; */
+/*     case MEDIA: */
+/*       if (record->event.pressed) { */
+/*         #ifdef AUDIO_ENABLE */
+/*           PLAY_SONG(tone_colemak); */
+/*         #endif */
+/*         persistent_default_layer_set(1UL<<_MEDIA); */
+/*       } */
+/*       return false; */
+/*       break; */
+/*     case SYMBOLS: */
+/*       if (record->event.pressed) { */
+/*         #ifdef AUDIO_ENABLE */
+/*           PLAY_SONG(tone_dvorak); */
+/*         #endif */
+/*         persistent_default_layer_set(1UL<<_SYMBOLS); */
+/*       } */
+/*       return false; */
+/*       break; */
+/*     case MOUSE: */
+/*       if (record->event.pressed) { */
+/*         #ifdef AUDIO_ENABLE */
+/*           PLAY_SONG(tone_dvorak); */
+/*         #endif */
+/*         persistent_default_layer_set(1UL<<_MOUSE); */
+/*       } */
+/*       return false; */
+/*       break; */
+/*       /1* if (record->event.pressed) { *1/ */
+/*       /1*     //not sure how to have keyboard check mode and set it to a variable, so my work around *1/ */
+/*       /1*     //uses another variable that would be set to true after the first time a reactive key is pressed. *1/ */
+/*       /1*   if (TOG_STATUS) { //TOG_STATUS checks is another reactive key currently pressed, only changes RGB mode if returns false *1/ */
+/*       /1*   } else { *1/ */
+/*       /1*     TOG_STATUS = !TOG_STATUS; *1/ */
+/*       /1*     #ifdef RGBLIGHT_ENABLE *1/ */
+/*       /1*       //rgblight_mode(RGBLIGHT_MODE_SNAKE + 1); *1/ */
+/*       /1*     #endif *1/ */
+/*       /1*   } *1/ */
+/*       /1*   layer_on(_MOUSE); *1/ */
+/*       /1*   update_tri_layer_RGB(_MOUSE, _NUMPAD, _UNUSED_5); *1/ */
+/*       /1* } else { *1/ */
+/*       /1*   #ifdef RGBLIGHT_ENABLE *1/ */
+/*       /1*     //rgblight_mode(RGB_current_mode);   // revert RGB to initial mode prior to RGB mode change *1/ */
+/*       /1*   #endif *1/ */
+/*       /1*   TOG_STATUS = false; *1/ */
+/*       /1*   layer_off(_MOUSE); *1/ */
+/*       /1*   update_tri_layer_RGB(_MOUSE, _NUMPAD, _UNUSED_5); *1/ */
+/*       /1* } *1/ */
+/*       /1* return false; *1/ */
+/*       /1* break; *1/ */
+/*     case NUMPAD: */
+/*       if (record->event.pressed) { */
+/*         //not sure how to have keyboard check mode and set it to a variable, so my work around */
+/*         //uses another variable that would be set to true after the first time a reactive key is pressed. */
+/*         if (TOG_STATUS) { //TOG_STATUS checks is another reactive key currently pressed, only changes RGB mode if returns false */
+/*         } else { */
+/*           TOG_STATUS = !TOG_STATUS; */
+/*           #ifdef RGBLIGHT_ENABLE */
+/*             //rgblight_mode(RGBLIGHT_MODE_SNAKE); */
+/*           #endif */
+/*         } */
+/*         layer_on(_NUMPAD); */
+/*         update_tri_layer_RGB(_MOUSE, _NUMPAD, _UNUSED_5); */
+/*       } else { */
+/*         #ifdef RGBLIGHT_ENABLE */
+/*           //rgblight_mode(RGB_current_mode);  // revert RGB to initial mode prior to RGB mode change */
+/*         #endif */
+/*         layer_off(_NUMPAD); */
+/*         TOG_STATUS = false; */
+/*         update_tri_layer_RGB(_MOUSE, _NUMPAD, _UNUSED_5); */
+/*       } */
+/*       return false; */
+/*       break; */
+/*     case UNUSED_5: */
+/*         if (record->event.pressed) { */
+/*           layer_on(_UNUSED_5); */
+/*         } else { */
+/*           layer_off(_UNUSED_5); */
+/*         } */
+/*         return false; */
+/*         break; */
+/*       //led operations - RGB mode change now updates the RGB_current_mode to allow the right RGB mode to be set after reactive keys are released */
+/*     case UNUSED_6: */
+/*       #ifdef RGBLIGHT_ENABLE */
+/*         if (record->event.pressed) { */
+/*           rgblight_mode(RGB_current_mode); */
+/*           rgblight_step(); */
+/*           RGB_current_mode = rgblight_config.mode; */
+/*         } */
+/*       #endif */
+/*       return false; */
+/*       break; */
+/*     case UNUSED_7: */
+/*       if (record->event.pressed) { */
+/*         if(keymap_config.swap_lalt_lgui==false){ */
+/*           register_code(KC_LANG2); */
+/*         }else{ */
+/*           SEND_STRING(SS_LALT("`")); */
+/*         } */
+/*       } else { */
+/*         unregister_code(KC_LANG2); */
+/*       } */
+/*       return false; */
+/*       break; */
+/*     case UNUSED_8: */
+/*       if (record->event.pressed) { */
+/*         if(keymap_config.swap_lalt_lgui==false){ */
+/*           register_code(KC_LANG1); */
+/*         }else{ */
+/*           SEND_STRING(SS_LALT("`")); */
+/*         } */
+/*       } else { */
+/*         unregister_code(KC_LANG1); */
+/*       } */
+/*       return false; */
+/*       break; */
+/*     case UNUSED_9: */
+/*       #ifdef RGBLIGHT_ENABLE */
+/*         if (record->event.pressed) { */
+/*           eeconfig_update_rgblight_default(); */
+/*           rgblight_enable(); */
+/*           RGB_current_mode = rgblight_config.mode; */
+/*         } */
+/*       #endif */
+/*       break; */
+/*   } */
+/*   return true; */
+/* } */
 
 void matrix_init_user(void) {
     #ifdef AUDIO_ENABLE
@@ -304,19 +267,11 @@ void music_scale_user(void)
 //SSD1306 OLED update loop, make sure to add #define SSD1306OLED in config.h
 #ifdef SSD1306OLED
 
-// hook point for 'led_test' keymap
-//   'default' keymap's led_test_init() is empty function, do nothing
-//   'led_test' keymap's led_test_init() force rgblight_mode_noeeprom(35);
-__attribute__ ((weak))
-void led_test_init(void) {}
-
 void matrix_scan_user(void) {
-     led_test_init();
      iota_gfx_task();  // this is what updates the display continuously
 }
 
-void matrix_update(struct CharacterMatrix *dest,
-                          const struct CharacterMatrix *source) {
+void matrix_update(struct CharacterMatrix *dest, const struct CharacterMatrix *source) {
   if (memcmp(dest->display, source->display, sizeof(dest->display))) {
     memcpy(dest->display, source->display, sizeof(dest->display));
     dest->dirty = true;
@@ -325,67 +280,94 @@ void matrix_update(struct CharacterMatrix *dest,
 
 //assign the right code to your layers for OLED display
 #define L_BASE 0
-#define L_LOWER (1<<_LOWER)
-#define L_RAISE (1<<_RAISE)
-#define L_ADJUST (1<<_ADJUST)
-#define L_ADJUST_TRI (L_ADJUST|L_RAISE|L_LOWER)
+#define L_MEDIA (1<<_MEDIA)
+#define L_SYMBOLS (1<<_SYMBOLS)
+#define L_MOUSE (1<<_MOUSE)
+#define L_NUMPAD (1<<_NUMPAD)
 
 static void render_logo(struct CharacterMatrix *matrix) {
 
-  static char logo[]={
+  static const char helix_logo[] PROGMEM ={
     0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8a,0x8b,0x8c,0x8d,0x8e,0x8f,0x90,0x91,0x92,0x93,0x94,
     0xa0,0xa1,0xa2,0xa3,0xa4,0xa5,0xa6,0xa7,0xa8,0xa9,0xaa,0xab,0xac,0xad,0xae,0xaf,0xb0,0xb1,0xb2,0xb3,0xb4,
     0xc0,0xc1,0xc2,0xc3,0xc4,0xc5,0xc6,0xc7,0xc8,0xc9,0xca,0xcb,0xcc,0xcd,0xce,0xcf,0xd0,0xd1,0xd2,0xd3,0xd4,
     0};
-  matrix_write(matrix, logo);
+  matrix_write_P(matrix, helix_logo);
   //matrix_write_P(&matrix, PSTR(" Split keyboard kit"));
 }
 
+static void render_rgbled_status(bool full, struct CharacterMatrix *matrix) {
+#ifdef RGBLIGHT_ENABLE
+  char buf[30];
+  if (RGBLIGHT_MODES > 1 && rgblight_config.enable) {
+      if (full) {
+          snprintf(buf, sizeof(buf), " LED %2d: %d,%d,%d ",
+                   rgblight_config.mode,
+                   rgblight_config.hue/RGBLIGHT_HUE_STEP,
+                   rgblight_config.sat/RGBLIGHT_SAT_STEP,
+                   rgblight_config.val/RGBLIGHT_VAL_STEP);
+      } else {
+          snprintf(buf, sizeof(buf), "[%2d] ",rgblight_config.mode);
+      }
+      matrix_write(matrix, buf);
+  }
+#endif
+}
 
+static void render_layer_status(struct CharacterMatrix *matrix) {
+  // Define layers here, Have not worked out how to have text displayed for each layer. Copy down the number you see and add a case for it below
+  char buf[10];
+  matrix_write_P(matrix, PSTR("Layer: "));
+    switch (layer_state) {
+        case L_BASE:
+           matrix_write_P(matrix, PSTR("coaxial"));
+           break;
+        case L_MEDIA:
+           matrix_write_P(matrix, PSTR("media"));
+           break;
+        case L_SYMBOLS:
+           matrix_write_P(matrix, PSTR("symbols"));
+           break;
+        case L_MOUSE:
+           matrix_write_P(matrix, PSTR("mouse"));
+           break;
+        case L_NUMPAD:
+           matrix_write_P(matrix, PSTR("numpad"));
+           break;
+        default:
+           matrix_write_P(matrix, PSTR("Undef-"));
+           snprintf(buf,sizeof(buf), "%ld", layer_state);
+           matrix_write(matrix, buf);
+    }
+}
 
 void render_status(struct CharacterMatrix *matrix) {
 
   // Render to mode icon
-  static char logo[][2][3]={{{0x95,0x96,0},{0xb5,0xb6,0}},{{0x97,0x98,0},{0xb7,0xb8,0}}};
+  static const char os_logo[][2][3] PROGMEM  ={{{0x95,0x96,0},{0xb5,0xb6,0}},{{0x97,0x98,0},{0xb7,0xb8,0}}};
   if(keymap_config.swap_lalt_lgui==false){
-    matrix_write(matrix, logo[0][0]);
+    matrix_write_P(matrix, os_logo[0][0]);
     matrix_write_P(matrix, PSTR("\n"));
-    matrix_write(matrix, logo[0][1]);
+    matrix_write_P(matrix, os_logo[0][1]);
   }else{
-    matrix_write(matrix, logo[1][0]);
+    matrix_write_P(matrix, os_logo[1][0]);
     matrix_write_P(matrix, PSTR("\n"));
-    matrix_write(matrix, logo[1][1]);
+    matrix_write_P(matrix, os_logo[1][1]);
   }
 
-  // Define layers here, Have not worked out how to have text displayed for each layer. Copy down the number you see and add a case for it below
-  char buf[40];
-  snprintf(buf,sizeof(buf), "Undef-%ld", layer_state);
-  matrix_write_P(matrix, PSTR("\nLayer: "));
-    switch (layer_state) {
-        case L_BASE:
-           matrix_write_P(matrix, PSTR("Coaxial"));
-           break;
-        case L_RAISE:
-           matrix_write_P(matrix, PSTR("Raise"));
-           break;
-        case L_LOWER:
-           matrix_write_P(matrix, PSTR("Lower"));
-           break;
-        case L_ADJUST:
-        case L_ADJUST_TRI:
-           matrix_write_P(matrix, PSTR("Adjust"));
-           break;
-        default:
-           matrix_write(matrix, buf);
-    }
+  matrix_write_P(matrix, PSTR(" "));
+  render_layer_status(matrix);
+  matrix_write_P(matrix, PSTR("\n"));
 
   // Host Keyboard LED Status
-  char led[40];
-    snprintf(led, sizeof(led), "\n%s  %s  %s",
-            (host_keyboard_leds() & (1<<USB_LED_NUM_LOCK)) ? "NUMLOCK" : "       ",
-            (host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK)) ? "CAPS" : "    ",
-            (host_keyboard_leds() & (1<<USB_LED_SCROLL_LOCK)) ? "SCLK" : "    ");
-  matrix_write(matrix, led);
+  matrix_write_P(matrix, (host_keyboard_leds() & (1<<USB_LED_NUM_LOCK)) ?
+                 PSTR("NUMLOCK") : PSTR("       "));
+  matrix_write_P(matrix, (host_keyboard_leds() & (1<<USB_LED_CAPS_LOCK)) ?
+                 PSTR("CAPS") : PSTR("    "));
+  matrix_write_P(matrix, (host_keyboard_leds() & (1<<USB_LED_SCROLL_LOCK)) ?
+                 PSTR("SCLK") : PSTR("    "));
+  matrix_write_P(matrix, PSTR("\n"));
+  render_rgbled_status(true, matrix);
 }
 
 
@@ -403,6 +385,8 @@ void iota_gfx_task_user(void) {
     render_status(&matrix);
   }else{
     render_logo(&matrix);
+    render_rgbled_status(false, &matrix);
+    render_layer_status(&matrix);
   }
   matrix_update(&display, &matrix);
 }

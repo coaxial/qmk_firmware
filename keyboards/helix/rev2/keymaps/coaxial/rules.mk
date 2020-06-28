@@ -4,8 +4,8 @@
 #   the appropriate keymap folder that will get included automatically
 #
 BOOTMAGIC_ENABLE = no       # Virtual DIP switch configuration(+1000)
-MOUSEKEY_ENABLE = no       # Mouse keys(+4700)
-EXTRAKEY_ENABLE = no       # Audio control and System control(+450)
+MOUSEKEY_ENABLE = yes       # Mouse keys(+4700)
+EXTRAKEY_ENABLE = yes       # Audio control and System control(+450)
 CONSOLE_ENABLE = no         # Console for debug(+400)
 COMMAND_ENABLE = no        # Commands for debug and configuration
 NKRO_ENABLE = no            # Nkey Rollover - if this doesn't work, see here: https://github.com/tmk/tmk_keyboard/wiki/FAQ#nkro-doesnt-work
@@ -34,7 +34,7 @@ OLED_ENABLE = yes           # OLED_ENABLE
 LOCAL_GLCDFONT = no         # use each keymaps "helixfont.h" instead of "common/glcdfont.c"
 LED_BACK_ENABLE = no        # LED backlight (Enable WS2812 RGB underlight.)
 LED_UNDERGLOW_ENABLE = no   # LED underglow (Enable WS2812 RGB underlight.)
-LED_ANIMATIONS = yes        # LED animations
+LED_ANIMATIONS = no         # LED animations
 IOS_DEVICE_ENABLE = no      # connect to IOS device (iPad,iPhone)
 Link_Time_Optimization = no # if firmware size over limit, try this option
 
