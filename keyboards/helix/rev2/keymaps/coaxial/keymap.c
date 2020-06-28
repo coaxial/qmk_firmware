@@ -64,165 +64,6 @@ float tone_plover_gb[][2]  = SONG(PLOVER_GOODBYE_SOUND);
 float music_scale[][2]     = SONG(MUSIC_SCALE_SOUND);
 #endif
 
-// define variables for reactive RGB
-/* bool TOG_STATUS = false; */
-/* int RGB_current_mode; */
-
-/* void persistent_default_layer_set(uint16_t default_layer) { */
-/*   eeconfig_update_default_layer(default_layer); */
-/*   default_layer_set(default_layer); */
-/* } */
-
-// Setting UNUSED_5 layer RGB back to default
-/* void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) { */
-/*   if (IS_LAYER_ON(layer1) && IS_LAYER_ON(layer2)) { */
-/*     #ifdef RGBLIGHT_ENABLE */
-/*       //rgblight_mode(RGB_current_mode); */
-/*     #endif */
-/*     layer_on(layer3); */
-/*   } else { */
-/*     layer_off(layer3); */
-/*   } */
-/* } */
-
-/* bool process_record_user(uint16_t keycode, keyrecord_t *record) { */
-/*   switch (keycode) { */
-/*     case QWERTY: */
-/*       if (record->event.pressed) { */
-/*         #ifdef AUDIO_ENABLE */
-/*           PLAY_SONG(tone_qwerty); */
-/*         #endif */
-/*         persistent_default_layer_set(1UL<<_QWERTY); */
-/*       } */
-/*       return false; */
-/*       break; */
-/*     case MEDIA: */
-/*       if (record->event.pressed) { */
-/*         #ifdef AUDIO_ENABLE */
-/*           PLAY_SONG(tone_colemak); */
-/*         #endif */
-/*         persistent_default_layer_set(1UL<<_MEDIA); */
-/*       } */
-/*       return false; */
-/*       break; */
-/*     case SYMBOLS: */
-/*       if (record->event.pressed) { */
-/*         #ifdef AUDIO_ENABLE */
-/*           PLAY_SONG(tone_dvorak); */
-/*         #endif */
-/*         persistent_default_layer_set(1UL<<_SYMBOLS); */
-/*       } */
-/*       return false; */
-/*       break; */
-/*     case MOUSE: */
-/*       if (record->event.pressed) { */
-/*         #ifdef AUDIO_ENABLE */
-/*           PLAY_SONG(tone_dvorak); */
-/*         #endif */
-/*         persistent_default_layer_set(1UL<<_MOUSE); */
-/*       } */
-/*       return false; */
-/*       break; */
-/*       /1* if (record->event.pressed) { *1/ */
-/*       /1*     //not sure how to have keyboard check mode and set it to a variable, so my work around *1/ */
-/*       /1*     //uses another variable that would be set to true after the first time a reactive key is pressed. *1/ */
-/*       /1*   if (TOG_STATUS) { //TOG_STATUS checks is another reactive key currently pressed, only changes RGB mode if returns false *1/ */
-/*       /1*   } else { *1/ */
-/*       /1*     TOG_STATUS = !TOG_STATUS; *1/ */
-/*       /1*     #ifdef RGBLIGHT_ENABLE *1/ */
-/*       /1*       //rgblight_mode(RGBLIGHT_MODE_SNAKE + 1); *1/ */
-/*       /1*     #endif *1/ */
-/*       /1*   } *1/ */
-/*       /1*   layer_on(_MOUSE); *1/ */
-/*       /1*   update_tri_layer_RGB(_MOUSE, _NUMPAD, _UNUSED_5); *1/ */
-/*       /1* } else { *1/ */
-/*       /1*   #ifdef RGBLIGHT_ENABLE *1/ */
-/*       /1*     //rgblight_mode(RGB_current_mode);   // revert RGB to initial mode prior to RGB mode change *1/ */
-/*       /1*   #endif *1/ */
-/*       /1*   TOG_STATUS = false; *1/ */
-/*       /1*   layer_off(_MOUSE); *1/ */
-/*       /1*   update_tri_layer_RGB(_MOUSE, _NUMPAD, _UNUSED_5); *1/ */
-/*       /1* } *1/ */
-/*       /1* return false; *1/ */
-/*       /1* break; *1/ */
-/*     case NUMPAD: */
-/*       if (record->event.pressed) { */
-/*         //not sure how to have keyboard check mode and set it to a variable, so my work around */
-/*         //uses another variable that would be set to true after the first time a reactive key is pressed. */
-/*         if (TOG_STATUS) { //TOG_STATUS checks is another reactive key currently pressed, only changes RGB mode if returns false */
-/*         } else { */
-/*           TOG_STATUS = !TOG_STATUS; */
-/*           #ifdef RGBLIGHT_ENABLE */
-/*             //rgblight_mode(RGBLIGHT_MODE_SNAKE); */
-/*           #endif */
-/*         } */
-/*         layer_on(_NUMPAD); */
-/*         update_tri_layer_RGB(_MOUSE, _NUMPAD, _UNUSED_5); */
-/*       } else { */
-/*         #ifdef RGBLIGHT_ENABLE */
-/*           //rgblight_mode(RGB_current_mode);  // revert RGB to initial mode prior to RGB mode change */
-/*         #endif */
-/*         layer_off(_NUMPAD); */
-/*         TOG_STATUS = false; */
-/*         update_tri_layer_RGB(_MOUSE, _NUMPAD, _UNUSED_5); */
-/*       } */
-/*       return false; */
-/*       break; */
-/*     case UNUSED_5: */
-/*         if (record->event.pressed) { */
-/*           layer_on(_UNUSED_5); */
-/*         } else { */
-/*           layer_off(_UNUSED_5); */
-/*         } */
-/*         return false; */
-/*         break; */
-/*       //led operations - RGB mode change now updates the RGB_current_mode to allow the right RGB mode to be set after reactive keys are released */
-/*     case UNUSED_6: */
-/*       #ifdef RGBLIGHT_ENABLE */
-/*         if (record->event.pressed) { */
-/*           rgblight_mode(RGB_current_mode); */
-/*           rgblight_step(); */
-/*           RGB_current_mode = rgblight_config.mode; */
-/*         } */
-/*       #endif */
-/*       return false; */
-/*       break; */
-/*     case UNUSED_7: */
-/*       if (record->event.pressed) { */
-/*         if(keymap_config.swap_lalt_lgui==false){ */
-/*           register_code(KC_LANG2); */
-/*         }else{ */
-/*           SEND_STRING(SS_LALT("`")); */
-/*         } */
-/*       } else { */
-/*         unregister_code(KC_LANG2); */
-/*       } */
-/*       return false; */
-/*       break; */
-/*     case UNUSED_8: */
-/*       if (record->event.pressed) { */
-/*         if(keymap_config.swap_lalt_lgui==false){ */
-/*           register_code(KC_LANG1); */
-/*         }else{ */
-/*           SEND_STRING(SS_LALT("`")); */
-/*         } */
-/*       } else { */
-/*         unregister_code(KC_LANG1); */
-/*       } */
-/*       return false; */
-/*       break; */
-/*     case UNUSED_9: */
-/*       #ifdef RGBLIGHT_ENABLE */
-/*         if (record->event.pressed) { */
-/*           eeconfig_update_rgblight_default(); */
-/*           rgblight_enable(); */
-/*           RGB_current_mode = rgblight_config.mode; */
-/*         } */
-/*       #endif */
-/*       break; */
-/*   } */
-/*   return true; */
-/* } */
 
 void matrix_init_user(void) {
     #ifdef AUDIO_ENABLE
@@ -293,25 +134,6 @@ static void render_logo(struct CharacterMatrix *matrix) {
     0xc0,0xc1,0xc2,0xc3,0xc4,0xc5,0xc6,0xc7,0xc8,0xc9,0xca,0xcb,0xcc,0xcd,0xce,0xcf,0xd0,0xd1,0xd2,0xd3,0xd4,
     0};
   matrix_write_P(matrix, helix_logo);
-  //matrix_write_P(&matrix, PSTR(" Split keyboard kit"));
-}
-
-static void render_rgbled_status(bool full, struct CharacterMatrix *matrix) {
-#ifdef RGBLIGHT_ENABLE
-  char buf[30];
-  if (RGBLIGHT_MODES > 1 && rgblight_config.enable) {
-      if (full) {
-          snprintf(buf, sizeof(buf), " LED %2d: %d,%d,%d ",
-                   rgblight_config.mode,
-                   rgblight_config.hue/RGBLIGHT_HUE_STEP,
-                   rgblight_config.sat/RGBLIGHT_SAT_STEP,
-                   rgblight_config.val/RGBLIGHT_VAL_STEP);
-      } else {
-          snprintf(buf, sizeof(buf), "[%2d] ",rgblight_config.mode);
-      }
-      matrix_write(matrix, buf);
-  }
-#endif
 }
 
 static void render_layer_status(struct CharacterMatrix *matrix) {
@@ -367,7 +189,6 @@ void render_status(struct CharacterMatrix *matrix) {
   matrix_write_P(matrix, (host_keyboard_leds() & (1<<USB_LED_SCROLL_LOCK)) ?
                  PSTR("SCLK") : PSTR("    "));
   matrix_write_P(matrix, PSTR("\n"));
-  render_rgbled_status(true, matrix);
 }
 
 
@@ -385,7 +206,6 @@ void iota_gfx_task_user(void) {
     render_status(&matrix);
   }else{
     render_logo(&matrix);
-    render_rgbled_status(false, &matrix);
     render_layer_status(&matrix);
   }
   matrix_update(&display, &matrix);
